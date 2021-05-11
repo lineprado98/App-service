@@ -21,7 +21,7 @@ export default  StyleSheet.create({
   },
 
   btn:{
-    width:'30%'
+    width:'100%'
   },
 
   titulo:{
@@ -40,12 +40,12 @@ export default  StyleSheet.create({
 
   headerCad:{
     paddingTop:30,
-    paddingLeft:20,
-    paddingRight:25,
+    paddingLeft:10,
+    paddingRight:10,
     paddingBottom:50,
-     width:'100%',
+    width:'100%',
     flexDirection:'row',
-    justifyContent:'space-between'
+    justifyContent:'center'
 
   }
 

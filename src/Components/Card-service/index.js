@@ -3,20 +3,19 @@ import React from 'react'
 import {AsyncStorageStatic, ActivityIndicator,View, Button,Text} from 'react-native'
 
 import {CardStyle, Content,Titulo, Valor} from '../Card-service/style'
-const Card = ({props}) =>{
-    let  servico = {titulo:'Titulo do serviço', categoria:'TI'}
-
+const Card = ({values}) =>{
+ 
 
     return (
 
      <CardStyle>
          <Content>
              <View style={{flexDirection:'row', justifyContent:'space-between'}}>
-               <Titulo> Trocar torneira     </Titulo> 
-                <Valor>  30R$ </Valor> 
+               <Titulo> {values.titulo} </Titulo> 
+                <Valor>  {values.valor} </Valor> 
              </View>
              <Text style={{ paddingStart:4, paddingBottom:10}}>
-               Categoria: {servico.categoria}
+               Categoria: {values.categorias[0].nome}
              </Text>
         
              <Button
