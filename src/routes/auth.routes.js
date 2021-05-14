@@ -1,7 +1,6 @@
 
 import React from 'react'
 import Signin from '../pages/Signin'
-import Dashboard from '../pages/dashboard'
 
 import { createStackNavigator} from'@react-navigation/stack'
 

@@ -4,35 +4,52 @@ import { useContext } from 'react/cjs/react.development'
 import AuthContext from '../../context/AuthContext'
 import api from '../../services/api'
 import Card from '../../Components/Card-service'
+import ModalService from '../../Components/Modal-service'
 
 const Dashboard = () => {
-    const { SignOut} = useContext(AuthContext)
-    const [servicos,setServicos] = useState([]);
-    useEffect(async()=>{
+
+  const [servicos,setServicos] = useState([]);
+  const [itemSelected, setItemSelected] = useState();
+  const [visible, setVisible] = React.useState(false);
+
+
+  const showModal = (item) => {
+    setVisible(true);
+    setItemSelected(item);
+  }
+  
+  const hideModal = () => setVisible(false);
+
+    useEffect(()=>{
+         (async ()=>{
+
       let res = await api.get('/servicos');
-      console.log('res',res);
+   
       setServicos(res.data.listServicos);
       
+    })();
     },[]);
-console.log(servicos);
-    const listServicos = servicos.map((item) =>
-    // Errado! A chave deveria ser definida aqui:
-        <Card values={item}/>
-  );
-  async   function handleSignOut(){
-        console.warn('saindo')
+  
 
-      await   SignOut()
-    }
+
+    const listServicos = servicos.map((item) =>
+    
+        <Card key={item.id} showModal={showModal} values={item}/>
+
+
+    );
+
 
     return (
       <SafeAreaView style={style.container}>
     <ScrollView >
       {servicos&&(listServicos)}
-        {/* <Button title="Sign Out" 
-        onPress={handleSignOut}/>  */}
-    </ScrollView>
+      </ScrollView>
+  
+        <ModalService visible={visible} hideModal={hideModal} value={itemSelected}></ModalService>
+      
     </SafeAreaView>
+
     )
 }
 

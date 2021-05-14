@@ -19,12 +19,12 @@ const teste= () =>{
 }
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text> Olá {usuarioLogado.name}</Text>
-      
+      {/* <Text> Olá {usuarioLogado.name}</Text> */}
+{/*       
        <Button
         title="Ir para o inicio"
         onPress={teste}
-      />
+      /> */}
     </View>
   );
 }

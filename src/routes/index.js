@@ -7,8 +7,9 @@ import { View, AsyncStorageStatic, ActivityIndicator} from 'react-native'
 import estilo from '../routes/style'
 // Verificar a rota disponivel 
 const Routes = () =>{
+    
     const {signed, loading} = useContext(AuthContext)
-    console.warn('status',loading)
+ 
     if(loading){
         return (
             <View style={estilo.container}>
@@ -19,7 +20,7 @@ const Routes = () =>{
   
         return signed?<AppRoutes/>:<AuthRoutes/>
 
-//    return  <AppRoutes/>
+///return  <AppRoutes/>
 
   
 }
