@@ -2,13 +2,19 @@
 
 // export default Signin 
  import React, {useContext, useState} from 'react'
- import {Image ,Button} from'react-native'
+ import {Image,Text } from'react-native'
  import {Input, TextError, TextErrorLogin} from '../../Components/Form'
+import { createStackNavigator} from'@react-navigation/stack'
+import Work from '../work'
+
  import {View,KeyboardView,ViewLogo} from '../../Components/Containers/container'
  import AuthContext from '../../context/AuthContext'
-//  import {KeyboardView, View, ViewLogo, Button}from '../../Components/Containers/container'
  import * as Yup from 'yup';
  import { Formik } from 'formik';
+
+import { TextInput , Button} from 'react-native-paper';
+
+const Cadastro = createStackNavigator();
 
   const SignupSchema = Yup.object().shape({
      email: Yup.string().email('Invalid email').required('Required'),
@@ -19,14 +25,14 @@
   
  });
  
- export const  Signin  =({ props}) =>{
+ export const  Signin  =({ props, navigation}) =>{
 
 
     const {user, SignIn, signed, errorLogin} = useContext(AuthContext)
 
     console.log('error para apresentar errorLogin',errorLogin);
     function handleSignIn({values}){
-  
+  console.warn('loooo')
         SignIn(values);
     }
   
@@ -38,11 +44,12 @@
      password:'' }}
      validationSchema={SignupSchema}
 
+
      onSubmit={values =>handleSignIn({values})  }// o onsubmit pega o handle submit
  
    >
      {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
-       <KeyboardView>
+       <KeyboardView  > 
         <ViewLogo>
         <Image
         style={{
@@ -51,22 +58,31 @@
           }}
           source={require('../../public/logo/logoQuebra.png')}/>
       </ViewLogo>
-       <View>
-         <Input
-           placeholder="E-mail"
-           onChangeText={handleChange('email')}
+       <View >
+         <TextInput 
+                 style={{ marginTop: 10,
+            backgroundColor:'transparent',
+            width:'60%'
+            }}
+          label="Email" variant="outlined"
+           onChange={handleChange('email')}
            onBlur={handleBlur('email')}
            value={values.email}
          />
            {errors.email && touched.email ? (
              <TextError>{errors.email}</TextError>
            ) : null}
-        <Input
+        <TextInput
+ 
+           style={{ marginTop: 10,
+           backgroundColor: 'transparent',
+           width:'60%'
+            }}
           secureTextEntry={true}
           autoCorrect={false}
-          onChangeText={handleChange('password')}
+          onChange={handleChange('password')}
           onBlur={handleBlur('password')}
-          placeholder="Senha"
+          label="Senha" variant="outlined"
           />
             {errors.password && touched.password ? (
              <TextError>{errors.password}</TextError>
@@ -74,8 +90,25 @@
 
             {errorLogin && (<TextErrorLogin>{errorLogin}</TextErrorLogin>)}
 
-         <Button onPress={handleSubmit} title="Submit" />
+        
        </View>
+       <View style={{marginTop:80}}>
+           <Button mode="contained" title="acessar"   variant="contained" style={{background:'#5e17eb'}} onPress={handleSubmit} >
+              <Text color='white'>Entrar</Text>
+             </Button>
+       </View>
+       <View style={{marginTop:10}}>
+            <Button
+                   color='#5e17eb'
+
+            style={{background:'white'}} 
+          //  mode="contained"
+        onPress={() => navigation.navigate('Cadastro')}
+      >CADASTRE-SE</Button>
+  
+ 
+       </View>
+      
       </KeyboardView>
      )}
    </Formik>

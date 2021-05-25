@@ -4,9 +4,9 @@ import styled from 'styled-components/native'
  export const KeyboardView = styled.KeyboardAvoidingView`
     flex:1;
     background: #ffff;
-    alignItems:center;
-    justifyContent:center;
+
     width:100%;
+ 
     `
   export const View = styled.View`
 
@@ -18,6 +18,8 @@ import styled from 'styled-components/native'
 
     alignItems: center;
     width:100%;
+    margin-top:20px;
+    margin-bottom:60px;
     `
 
  export const Button = styled.Button`

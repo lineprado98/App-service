@@ -26,9 +26,10 @@ export const AuthProvider = ({children}) => {
     },[]);
 
 async function SignIn(values){
+  
     setLoading(true)  // api.defaults.headers['Authorization'] = `Bearer${res.token}`
     const res = await Autenticar(values);
- 
+ console.log(res);
     if(res.data.status==200){
       let userAuth= res.data.user;
       setUser(res.data.user)

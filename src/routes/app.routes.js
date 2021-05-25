@@ -6,7 +6,7 @@ import Profile from '../pages/profile'
 import { View, Text, Button } from 'react-native';
 import AuthContext from '../context/AuthContext'
 import { createStackNavigator} from'@react-navigation/stack'
-import Signin from '../pages/Signin'
+
 
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer, DrawerActions } from '@react-navigation/native';

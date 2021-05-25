@@ -1,7 +1,7 @@
 import React,{useState} from 'react'
 
 import estilo from './style'
-import { Text, View ,Button, SafeAreaView} from 'react-native';
+import { Text, SafeAreaView} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Input , TextError,TextArea, CurrencyInputStyle} from '../../Components/Form';
 // import MultiSelect from 'react-native-multiple-select';
@@ -10,6 +10,8 @@ import { Input , TextError,TextArea, CurrencyInputStyle} from '../../Components/
  import api from '../../services/api'
 import FlashMessage from "react-native-flash-message";
 import CurrencyInput from 'react-native-currency-input';
+import { TextInput , Button} from 'react-native-paper';
+ import {View,KeyboardView,ViewLogo} from '../../Components/Containers/container'
 
 
 const Work= ({navigation}) => {
@@ -77,13 +79,17 @@ const Work= ({navigation}) => {
      
 
      {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
-    <SafeAreaView style={ estilo.container}>
-      <View style={estilo.content}>
+    <KeyboardView>
+      <View >
 
 
       <Text style={estilo.titulo}>Adicionar Serviço</Text>
-           <Input
-           placeholder="Título"
+           <TextInput
+            style={{ marginTop: 5,
+            backgroundColor:'transparent',
+            width:'60%'
+            }}
+          label="Título" variant="outlined"
            onChangeText={handleChange('titulo')}
            onBlur={handleBlur('titulo')}
            value={values.titulo}
@@ -92,8 +98,12 @@ const Work= ({navigation}) => {
              <TextError>{errors.titulo}</TextError>
            ) : null}
 
-          <TextArea
-           placeholder="Descrição"
+          <TextInput
+            style={{ marginTop: 5,
+            backgroundColor:'transparent',
+            width:'60%'
+            }}
+           label="Descrição" variant="outlined"
            multiline={true}
            onChangeText={handleChange('descricao')}
            onBlur={handleBlur('descricao')}
@@ -103,21 +113,15 @@ const Work= ({navigation}) => {
              <TextError>{errors.descricao}</TextError>
            ) : null}
 
-           <Input
-           style={{background:'white',
-            width:'95%',
-            marginLeft:'8px',
-            marginTop:'2px',
+           <TextInput
+            style={{ marginTop: 5,
+            backgroundColor:'transparent',
+            width:'60%'
+            }}
+           label="Valor" variant="outlined"
 
-            border:2,
-            border:'solid 3px #9e9e9e',
-            borderWidth:1,
-            borderRadius:5,
-            height:'35px'}}
             name="valor"
-           placeholder="Valor"
             onChangeText={handleChange('valor')}
-
            onChangeValue={values.valor}
            onBlur={handleBlur('valor')}
            value={values.valor} />
@@ -155,24 +159,19 @@ const Work= ({navigation}) => {
         </View>
       </View>
     <View style={estilo.headerCad}>
-      {/* <View style={estilo.btn}>
-         <Button
-          title="Cancelar"
-          color="#d23350"
-          />  
-      </View> */}
-     <View style={estilo.btn}>
-       <Button
+
+   <Button
+       style={{background:'#5e17eb'}}
+       color='white'
         title="Salvar"
         onPress={handleSubmit}
-      />
-      </View>
+        >mmm</Button>
 
       </View>
       </View>
 
-    
-    </SafeAreaView>
+    </KeyboardView>  
+   
   
      )}
    </Formik>

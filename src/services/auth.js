@@ -3,8 +3,15 @@
 import axios from 'axios'
 
 const Autenticar = async (values)  => {
+//const BASE_URL  = 'http://192.168.0.3:8000/api'
 const BASE_URL  = 'http://127.0.0.1:8000/api'
+
+
     try{
+     console.log(values);
+        if(values.data.user.token){
+            return values;
+        }
 
          return await axios.post(`${BASE_URL}/login`,values)
 
