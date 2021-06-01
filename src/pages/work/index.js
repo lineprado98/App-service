@@ -1,179 +1,190 @@
 import React,{useState} from 'react'
 
-import estilo from './style'
+import style from './style'
 import { Text, SafeAreaView} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Input , TextError,TextArea, CurrencyInputStyle} from '../../Components/Form';
-// import MultiSelect from 'react-native-multiple-select';
- import * as Yup from 'yup';
- import { Formik ,resetForm} from 'formik';
- import api from '../../services/api'
-import FlashMessage from "react-native-flash-message";
-import CurrencyInput from 'react-native-currency-input';
-import { TextInput , Button} from 'react-native-paper';
- import {View,KeyboardView,ViewLogo} from '../../Components/Containers/container'
+import  DropDown  from  'react-native-paper-dropdown';
 
+import * as Yup from 'yup';
+import { Formik ,resetForm} from 'formik';
+import api from '../../services/api'
+import FlashMessage from "react-native-flash-message";
+
+import { TextInput , Button, Provider} from 'react-native-paper';
+import {View,KeyboardView,ViewLogo} from '../../Components/Containers/container'
+import { TextInputMask } from 'react-native-masked-text'
+import { color } from 'react-native-reanimated';
 
 const Work= ({navigation}) => {
-  // class MultiSelectExample extends Component {
 
-  // state = {
-  //   selectedItems : [];
-  // };
-    const items = [{
-    id: '92iijs7yta',
-    name: 'Educação'
-  }, {
-    id: 'a0s0a8ssbsd',
-    name: 'Manutenção'
-  }, {
-    id: '16hbajsabsd',
-    name: 'Beleza'
+    const items = [
+    {
+    value: '1',
+    label: 'TI'
+    },
+    {
+    value: '2',
+    label: 'Educação'
+    },
+    {
+    value: '3',
+    label: 'Beleza'
   }]
 
+  const [categoria, setCategoria] = useState(null);
 
   //  Validações
   const SignupSchema = Yup.object().shape({
+
     titulo: Yup.string().required('Campo Obrigatório'),
-    descricao: Yup.string()
-     .min(10, 'A descrição deve conter no minímo 10 caracters!')
-     .required('Campo Obrigatório'),
-  
+    descricao: Yup.string().min(10, 'A descrição deve conter no minímo 10 caracters!').required('Campo Obrigatório'),
+    valor: Yup.string().required(),
+    id_categoria:Yup.string().required()
+
   });
 
-
-  const [selectedItems, setSelectedItems] = useState([]);
+  const [showDropDown, setShowDropDown] = useState(false);
   
-  const onSelectedItemsChange = (selectedItems) => {
-    // Set Selected Items
-    setSelectedItems(selectedItems);
-  };
 
-  const  submit = async (values, {setSubmitting, setErrors, setStatus, resetForm}) =>{
+  
+  const  submit = async (values, {setSubmitting, setErrors, setStatus, resetForm,maskCep}) =>{
 
-      try{
+
+      try {
+        console.log(values);
         let res = await  api.post('/servico',values);
-        if(res){
-          resetForm({})
-              
-
+        if(res) {
+          resetForm({titulo: '', descricao:'', valor:'',id_user:1,telefone:'', id_categoria:{} })
         }
         
-      }catch(e){
-        
+      } catch(e) {
+        console.log('error',e);
       }
    
   }
 
   return (
-    <Formik initialValues={{ 
-     titulo: '',
-     descricao:'',
-     valor:null,
-     id_categoria:1,
-      id_user:1 }}
-
-     validationSchema={SignupSchema}
-
-    onSubmit={submit}>
+    <Formik initialValues={{  titulo: '', descricao:'', valor:'',id_user:1,telefone:'', id_categoria:null }}  validationSchema={SignupSchema}  onSubmit={submit}>
      
-
-     {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
+     {({ handleChange, handleBlur, handleSubmit, values, errors, touched , handleFocus}) => (
+       
     <KeyboardView>
+     
       <View >
+          <SafeAreaView style={style.containerStyle}  >
+            <DropDown
+              label='Categoria'
+              value={values.id_categoria}
+              mode='flat'
+              // setValue={ (text)=>{setCategoria(text)}}
+              setValue={handleChange('id_categoria')}
+              onBlur={handleBlur('id_categoria')}
+              list={items}
+              visible={showDropDown}
+              showDropDown={() =>  setShowDropDown(true)}
+              onDismiss={() =>  setShowDropDown(false)}
+              inputProps={{
+                style:{backgroundColor:'transparent'},
+                right:  <TextInput.Icon  name={'menu-down'}  />,
+
+              }}
+
+            />
+          </SafeAreaView >
+         {errors.categoria && touched.categoria ? ( <TextError>{errors.categoria}</TextError> ) : null}
 
 
-      <Text style={estilo.titulo}>Adicionar Serviço</Text>
-           <TextInput
-            style={{ marginTop: 5,
-            backgroundColor:'transparent',
-            width:'60%'
-            }}
-          label="Título" variant="outlined"
+          <TextInput
+           style={style.inputText}
+           label="Título" variant="outlined"
            onChangeText={handleChange('titulo')}
            onBlur={handleBlur('titulo')}
            value={values.titulo}
-         />
-           {errors.titulo && touched.titulo ? (
-             <TextError>{errors.titulo}</TextError>
-           ) : null}
+          />
+           {errors.titulo && touched.titulo ? ( <TextError>{errors.titulo}</TextError> ) : null}
+
 
           <TextInput
-            style={{ marginTop: 5,
-            backgroundColor:'transparent',
-            width:'60%'
-            }}
+           style={style.inputText}
            label="Descrição" variant="outlined"
            multiline={true}
            onChangeText={handleChange('descricao')}
            onBlur={handleBlur('descricao')}
            value={values.descricao}
-         />
-           {errors.descricao && touched.descricao ? (
-             <TextError>{errors.descricao}</TextError>
-           ) : null}
+          />
+          {errors.descricao && touched.descricao ? ( <TextError>{errors.descricao}</TextError> ) : null}
 
-           <TextInput
-            style={{ marginTop: 5,
-            backgroundColor:'transparent',
-            width:'60%'
-            }}
-           label="Valor" variant="outlined"
+   
+          <TextInput
+            style={style.inputText}
+            label="Contato" variant="outlined"
+            onChange={value=>{ handleChange('telefone',value) }}
+            onChangeText={handleChange('telefone')}
+            onBlur={handleBlur('telefone')}
+            value={values.telefone}
+            render = { props =>
+           <TextInputMask
+             type={'cel-phone'}
+             options={{
+                maskType: 'BRL',
+                withDDD: true,
+                dddMask: '(99) '
+              }}
+            value={values.telefone}
+            onChange={value=>{ handleChange('telefone',value) }}
+            onChangeText={handleChange('telefone')}
+     
+            {...props}
+           />
+            }
+          />
 
-            name="valor"
+          <TextInput
+            style={style.inputText}
+            label="Valor" variant="outlined"
             onChangeText={handleChange('valor')}
-           onChangeValue={values.valor}
-           onBlur={handleBlur('valor')}
-           value={values.valor} />
+            value={values.valor}
+            render = { props =>
+           <TextInputMask
+            value={values.valor}
+            onChange={value=>{ handleChange('valor',value) }}
+            onChangeText={handleChange('valor')}
+            type={'money'}
+            {...props}
+              options={{
+                precision: 2,
+                separator: ',',
+                delimiter: '.',
+                unit: 'R$',
+                suffixUnit: ''
+              }}
+           />
+            }
+          />
+          {errors.valor && touched.valor ? ( <TextError>{errors.valor}</TextError> ) : null}
 
-           
-          {errors.valor && touched.valor ? (
-             <TextError>{errors.valor}</TextError>
-           ) : null}
- 
-        <View  style={estilo.select}>
-        {/* <MultiSelect
-            hideTags
-            items={items}
-            uniqueKey="id"
-            //  ref={() => { multiSelect = commponet }}
-            onSelectedItemsChange={onSelectedItemsChange}
-            selectedItems={selectedItems}
-            selectText="Categorias"
-            searchInputPlaceholderText="Search Items..."
-            onChangeInput={ (text)=> console.log(text)}
-            // altFontFamily="ProximaNova-Light"
-            // tagRemoveIconColor="#CCC"
-            // tagBorderColor="#CCC"
-            // tagTextColor="#CCC"
-            // selectedItemTextColor="#CCC"
-            // selectedItemIconColor="#CCC"
-            // itemTextColor="#000"
-            
-            displayKey="name"
-            // submitButtonColor="#CCC"
-            submitButtonText="Submit"
-        /> */}
-        <View>
-          {/* {(selectedItems)} */}
+     
+
+
+
         </View>
-      </View>
-    <View style={estilo.headerCad}>
+ 
+   
+      <View style={style.headerCad}>
 
-   <Button
-       style={{background:'#5e17eb'}}
-       color='white'
-        title="Salvar"
-        onPress={handleSubmit}
-        >mmm</Button>
-
-      </View>
+        <Button
+          style= {{background:'#5e17eb', paddingTop:2, marginTop:100, width:150, height:40}}
+          onPress = { handleSubmit }
+          color='white'> Anunciar</Button>
       </View>
 
-    </KeyboardView>  
+
+   </KeyboardView>  
    
   
-     )}
+     
+    )}
    </Formik>
    )
 }

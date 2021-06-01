@@ -9,7 +9,7 @@ import estilo from '../routes/style'
 const Routes = () =>{
     
     const {signed, loading} = useContext(AuthContext)
- 
+  console.log('resulte do signe',signed);
     if(loading){
         return (
             <View style={estilo.container}>
@@ -18,7 +18,7 @@ const Routes = () =>{
         )
         }
   
-       return signed?<AppRoutes/>:<AuthRoutes/>
+        return signed?<AppRoutes/>:<AuthRoutes/>
 
 //return  <AppRoutes/>
 

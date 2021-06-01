@@ -25,10 +25,10 @@ export const AuthProvider = ({children}) => {
     loadStoragegetData();
     },[]);
 
-async function SignIn(values){
-  
+async function SignIn(values,cad){
+ 
     setLoading(true)  // api.defaults.headers['Authorization'] = `Bearer${res.token}`
-    const res = await Autenticar(values);
+    const res = await Autenticar(values, cad);
  console.log(res);
     if(res.data.status==200){
       let userAuth= res.data.user;
@@ -50,7 +50,7 @@ async function SignIn(values){
 
     }
     async function SignOut() {
-        console.log( ' SignOut')
+        console.log( 'SignOut - context')
          AsyncStorageStatic.clear().then(()=>{
              setUser(null)
     })

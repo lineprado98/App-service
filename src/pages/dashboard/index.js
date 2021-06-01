@@ -21,6 +21,7 @@ const Dashboard = () => {
   const hideModal = () => setVisible(false);
 
     useEffect(()=>{
+      console.log('use effect');
          (async ()=>{
 
       let res = await api.get('/servicos');
@@ -28,7 +29,7 @@ const Dashboard = () => {
       setServicos(res.data.listServicos);
       
     })();
-    },[]);
+    },[servicos]);
   
 
 

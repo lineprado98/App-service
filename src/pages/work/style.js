@@ -1,9 +1,10 @@
+import { red } from '@material-ui/core/colors';
 import React from 'react';
 import { StyleSheet } from 'react-native'
 import AuthContext from '../../context/AuthContext';
 
 
-export default  StyleSheet.create({
+const  style =  StyleSheet.create({
 
   container: { 
     padding:20,
@@ -47,6 +48,35 @@ export default  StyleSheet.create({
     flexDirection:'row',
     justifyContent:'center'
 
-  }
+  },
+    maskedInput:{ 
+    flexGrow:1,
+    //height:40,
+    fontSize:18,
+    borderBottomColor:"#999",
+    borderBottomWidth:1,
+    borderStyle:"solid",
+    alignSelf:"flex-start"
+
+  },
+  containerMask:{
+    flexDirection:"row",
+    marginBottom:20,
+    marginLeft:10,
+    marginRight:10
+  },
+
+  inputText : {
+  marginTop: 5,
+  backgroundColor:'transparent',
+  width:'60%'
+  },
+  
+  containerStyle: {
+  flex:  1,
+  width:'60%'
+  },
+
 
 })
+export default style 

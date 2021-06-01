@@ -13,7 +13,7 @@ const AuthRoutes = () => (
         {/* Cada tela usa o screen */}
 
         <AuthStack.Screen name="SignIn" component={Signin} /> 
-        <AuthStack.Screen name="Cadastro" component={Registry}/> 
+        {/* <AuthStack.Screen name="Cadastro" component={Registry}/>  */}
 
     </AuthStack.Navigator>
 )

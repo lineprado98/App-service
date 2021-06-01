@@ -28,11 +28,11 @@ const Cadastro = createStackNavigator();
  export const  Signin  =({ props, navigation}) =>{
 
 
+
     const {user, SignIn, signed, errorLogin} = useContext(AuthContext)
 
-    console.log('error para apresentar errorLogin',errorLogin);
     function handleSignIn({values}){
-  console.warn('loooo')
+
         SignIn(values);
     }
   
@@ -78,11 +78,13 @@ const Cadastro = createStackNavigator();
            backgroundColor: 'transparent',
            width:'60%'
             }}
-          secureTextEntry={true}
+                  secureTextEntry
+
           autoCorrect={false}
           onChange={handleChange('password')}
           onBlur={handleBlur('password')}
           label="Senha" variant="outlined"
+           right={<TextInput.Icon name="eye" />}
           />
             {errors.password && touched.password ? (
              <TextError>{errors.password}</TextError>
@@ -94,7 +96,7 @@ const Cadastro = createStackNavigator();
        </View>
        <View style={{marginTop:80}}>
            <Button mode="contained" title="acessar"   variant="contained" style={{background:'#5e17eb'}} onPress={handleSubmit} >
-              <Text color='white'>Entrar</Text>
+              {/* <Text color='white'>Entrar</Text> */}
              </Button>
        </View>
        <View style={{marginTop:10}}>

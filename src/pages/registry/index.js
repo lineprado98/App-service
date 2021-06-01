@@ -34,9 +34,12 @@ const Registry = ({navigation}) => {
 
   const  submit = async (values, {setSubmitting, setErrors, setStatus, resetForm}) =>{
       try{
+        
         let res = await  api.post('/novo-usuario',values);
+        
         if(res){
-          SignIn(res)
+          let cad = true;
+          SignIn(res,cad)
           resetForm({})
             
         }
@@ -118,7 +121,7 @@ const Registry = ({navigation}) => {
        <Text>Tornar-me um profissional</Text>
      <Switch  name="is_profisionale"  onChangeValue={values.is_profisionale} color="#5e17eb" value={isSwitchOn} onValueChange={onToggleSwitch} />
     </View>  
-       <Button   variant="contained" style={{background:'#5e17eb',marginTop:80,color:'white'}} onPress={handleSubmit} >
+       <Button  color='white' variant="contained" style={{background:'#5e17eb',marginTop:80}} onPress={handleSubmit} >
            Finalizar </Button>
   
       </View>

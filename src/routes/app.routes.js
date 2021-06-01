@@ -42,7 +42,7 @@ function CustomDrawerContent(props) {
       <DrawerItemList {...props} />
       <DrawerItem
         label="Sair"
-        onPress={  sair}
+        onPress={sair}
       />
   
     </DrawerContentScrollView>
@@ -59,7 +59,7 @@ const [rotaAtual, setRota] = useState('Serviços');
       {/* <Appbar.BackAction /> */}
       <Appbar.Action icon="menu" 
             onPress={() =>{navigation.dispatch(DrawerActions.openDrawer())}} >
-            <Drawer.Navigator initialRouteName="Dasboard" >
+            <Drawer.Navigator  >
       <Drawer.Screen name="Dasboard"  />
     </Drawer.Navigator >
     </Appbar.Action>
@@ -97,11 +97,15 @@ const [rotaAtual, setRota] = useState('Serviços');
     
     >  
     
-      <Tab.Screen  name="Dashboard"  component={Dashboard}
+      <Tab.Screen   onPress={()=> {
+      Actions.loadData({type: ActionConst.REFRESH});
+    }}  name="Dashboard"  component={Dashboard}
+       
          listeners={({ navigation, route }) => ({
+           
                 tabPress: e => {
                   setRota('Serviços')
-                        // navigation.navigate('Perfil')
+                  
                 },
             })}/>
 

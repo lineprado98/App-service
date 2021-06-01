@@ -5,9 +5,9 @@ import {View,Text,StyleSheet, Button, ScrollView,StatusBar,SafeAreaView} from're
 import api from '../../services/api'
 import Card from '../../Components/Card-service'
 import { Modal, Portal,  Provider } from 'react-native-paper';
-
+import Whatsapp from '../Whatsapp'
 const ModalService = ({ value,visible,hideModal,})=>{
-console.log('valor denro da modal',value);
+
    const containerStyle = {backgroundColor: 'white', padding: 20}
 
    if(value){
@@ -16,6 +16,7 @@ console.log('valor denro da modal',value);
       <Portal>
         <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={containerStyle}>
           <Text>{value.id}</Text>
+          <Whatsapp></Whatsapp>
         </Modal>
       </Portal>
     </Provider> 
