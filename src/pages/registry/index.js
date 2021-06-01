@@ -1,7 +1,7 @@
 import React,{useState,useContext} from 'react'
 
-import estilo from './style'
-import { Text, SafeAreaView} from 'react-native';
+import style from './style'
+import { Text, SafeAreaView,TouchableOpacity,Image} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Input , TextError,TextArea, CurrencyInputStyle} from '../../Components/Form';
  import * as Yup from 'yup';
@@ -10,9 +10,12 @@ import { Input , TextError,TextArea, CurrencyInputStyle} from '../../Components/
  //import TextInputMasks from 'react-native-text-input-mask';
  import AuthContext from '../../context/AuthContext'
 
-import { TextInput , Button,Switch } from 'react-native-paper';
+import { TextInput , Button,Switch,Badge ,IconButton} from 'react-native-paper';
  import {View,KeyboardView,ViewLogo} from '../../Components/Containers/container'
 
+import Constants from "expo-constants";
+import * as Permissions from "expo-permissions";
+import * as ImagePicker from "expo-image-picker";
 
 const Registry = ({navigation}) => {
    const {user, SignIn, signed, errorLogin} = useContext(AuthContext)
@@ -20,7 +23,34 @@ const Registry = ({navigation}) => {
 
   const onToggleSwitch = () => setIsSwitchOn(!isSwitchOn);
 
+  const [avatar, setAvatar] = useState();
 
+  //escolher imagem
+    async function imagePickerCall() {
+    if (Constants.platform.ios) {
+      const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+
+      if (status !== "granted") {
+        alert("Nós precisamos dessa permissão.");
+        return;
+      }
+    }
+
+    const data = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All
+    });
+    console.log(data);
+
+    if (data.cancelled) {
+      return;
+    }
+
+    if (!data.uri) {
+      return;
+    }
+
+    setAvatar(data);
+  }
 
   //  Validações
   const RegistrySchema = Yup.object().shape({
@@ -34,10 +64,17 @@ const Registry = ({navigation}) => {
 
   const  submit = async (values, {setSubmitting, setErrors, setStatus, resetForm}) =>{
       try{
+        console.log(avatar.uri);
+   
+        values.is_professional = isSwitchOn
+        if(avatar){
+          values.image = avatar.uri
+
+        }
+        console.log(values);
+       let res = await  api.post('/novo-usuario',values);
         
-        let res = await  api.post('/novo-usuario',values);
-        
-        if(res){
+        if(res) {
           let cad = true;
           SignIn(res,cad)
           resetForm({})
@@ -54,8 +91,9 @@ const Registry = ({navigation}) => {
     <Formik initialValues={{ 
      nome:'',
      email:'',
-     is_profisionale:false,
-     senha:''
+     senha:'',
+     is_professional:false,
+     image:null
 
     }}
 
@@ -66,9 +104,28 @@ const Registry = ({navigation}) => {
 
      {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
     <KeyboardView>
+          <View >
+          { avatar?
+               <>
+            <Image source={{uri:avatar.uri}} style={style.avatar}/>
+                <Button color='#5e17eb' style={{background:'white'}} 
+               onPress={imagePickerCall}>Alterar</Button>
+             </>: 
+            <View style={style.button}>  
+                <Badge  style={{backgroundColor:'#5e17eb'}} size={100}>
+                    <IconButton
+                      icon="camera"
+                      color={'white'}
+                      size={60}
+                      onPress={imagePickerCall}
+                    />
+                </Badge>
+            </View>
+            }
+        </View>
+
       <View >
-
-
+        
            <TextInput
             style={{ marginTop: 5,
             backgroundColor:'transparent',
@@ -117,17 +174,20 @@ const Registry = ({navigation}) => {
            ) : null}
 
 
-     <View style={{marginTop:80}}>
-       <Text>Tornar-me um profissional</Text>
-     <Switch  name="is_profisionale"  onChangeValue={values.is_profisionale} color="#5e17eb" value={isSwitchOn} onValueChange={onToggleSwitch} />
-    </View>  
-       <Button  color='white' variant="contained" style={{background:'#5e17eb',marginTop:80}} onPress={handleSubmit} >
-           Finalizar </Button>
-  
+        <View style={{marginTop:80}}>
+          <Text>Tornar-me um profissional</Text>
+          <Switch   color="#5e17eb" value={isSwitchOn} onValueChange={onToggleSwitch} />
+        </View> 
+
+        <View>
+            <Button
+            style= {{backgroundColor:'#5e17eb' , paddingTop:2, borderRadius:16, marginTop:70, width:150, height:40}}
+            onPress={handleSubmit}
+            color='white'>Finalizar</Button>
+        </View>
       </View>
 
     </KeyboardView>  
-   
   
      )}
    </Formik>

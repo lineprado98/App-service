@@ -1,92 +1,99 @@
-import React,{useState} from 'react'
+import React, { useState } from "react";
+import { View, TouchableOpacity, Text, StyleSheet, Image } from "react-native";
 
-import { useNavigation } from '@react-navigation/native';
+import Constants from "expo-constants";
+import * as Permissions from "expo-permissions";
+import * as ImagePicker from "expo-image-picker";
+import Axios from "axios";
 
- import * as Yup from 'yup';
- import { Formik ,resetForm} from 'formik';
- import api from '../../services/api'
-import FlashMessage from "react-native-flash-message";
-import { TextInput , Button} from 'react-native-paper';
-import {KeyboardView,View,ViewLogo} from '../../Components/Containers/container'
- import { TextInputMask } from 'react-native-masked-text'
-import style from '../work2/style';
+const Work2 = () => {
+  const [avatar, setAvatar] = useState();
 
-const Work2= ({navigation}) => {
+  async function imagePickerCall() {
+    if (Constants.platform.ios) {
+      const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
 
-  const [cpf, setCpf] = useState();
-    const items = [{
-    id: '92iijs7yta',
-    name: 'Educação'
-  }, {
-    id: 'a0s0a8ssbsd',
-    name: 'Manutenção'
-  }, {
-    id: '16hbajsabsd',
-    name: 'Beleza'
-  }]
+      if (status !== "granted") {
+        alert("Nós precisamos dessa permissão.");
+        return;
+      }
+    }
+
+    const data = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All
+    });
+    console.log(data);
+
+    if (data.cancelled) {
+      return;
+    }
+
+    if (!data.uri) {
+      return;
+    }
+
+    setAvatar(data);
+  }
+
+  async function uploadImage() {
+    const data = new FormData();
+    console.log(data);
+
+    data.append("avatar", {
+      uri: avatar.uri,
+      type: avatar.type
+    });
+
+        console.log(data);
 
 
-  //  Validações
-  const SignupSchema = Yup.object().shape({
-    titulo: Yup.string().required('Campo Obrigatório'),
-    descricao: Yup.string()
-     .min(10, 'A descrição deve conter no minímo 10 caracters!')
-     .required('Campo Obrigatório'),
-  
-  });
-
-
-  const  submit = async (values, {setSubmitting, setErrors, setStatus, resetForm,maskCep}) =>{
-
-    console.log(values);
-    try {
-        let res = await  api.post('/servico',values);
-        console.log(values);
-        if(res) {
-          resetForm({})
-        }
-        
-      }catch(e){}
-   
+    await Axios.post("http://localhost:8000/files", data);
   }
 
   return (
-     
-
-    <Formik initialValues={{  titulo: '', descricao:'', valor:'', id_categoria:1,id_user:1 }} 
-    //validationSchema={SignupSchema}
-     onSubmit={submit}>
-     
-     {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
-             <KeyboardView>
-    <View>
-            {/* <TextInputMask style={style.maskedInput}
-            placeholder="CPF"
-            type={'cpf'}
-            value={cpf}
-            onChangeText={value=>{ setCpf(value) }}
-            /> */}
-            
-            <TextInputMask style={style.maskedInput}
-            placeholder="Valor"
-            type={'cpf'}
-             
-            value={values.valor}
-            onChange={value=>{ handleChange('valor',value) }}
-            onChangeText={handleChange('valor')}
-            />
-  
-
-                
-         <Button style={{background:'#5e17eb', marginTop:100}} onPress={handleSubmit} color='white' > Anunciar </Button>
-
-    </View>  
-   
-  </KeyboardView>
-     )}
-   </Formik>
-  
-
-   )
+    <View style={styles.container}>
+      <Image
+        source={{
+          uri: avatar
+            ? avatar.uri
+            : "https://mltmpgeox6sf.i.optimole.com/w:761/h:720/q:auto/https://redbanksmilesnj.com/wp-content/uploads/2015/11/man-avatar-placeholder.png"
+        }}
+        style={style.avatar}
+      />
+      <TouchableOpacity style={styles.button} onPress={imagePickerCall}>
+        <Text style={styles.buttonText}>Escolher imagem</Text>
+      </TouchableOpacity>
+      {/* <TouchableOpacity style={styles.button} onPress={uploadImage}>
+        <Text style={styles.buttonText}>Enviar imagem</Text>
+      </TouchableOpacity> */}
+    </View>
+  );
 }
-export default  Work2
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center"
+  },
+  button: {
+    width: 150,
+    height: 50,
+    borderRadius: 3,
+    backgroundColor: "#7159c1",
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 20
+  },
+  buttonText: {
+    color: "#fff"
+  },
+  avatar: {
+    width: 100,
+    height: 100,
+    borderRadius: 50
+  }
+});
+
+
+export default Work2

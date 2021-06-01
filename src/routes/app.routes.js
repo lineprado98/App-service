@@ -2,6 +2,8 @@
 import React,{useState,useContext} from 'react'
 import Dashboard from '../pages/dashboard'
 import Work from '../pages/work'
+import Professional from '../pages/professional'
+
 import Profile from '../pages/profile'
 import { View, Text, Button } from 'react-native';
 import AuthContext from '../context/AuthContext'
@@ -31,7 +33,10 @@ const Tab = createBottomTabNavigator();
 
 
 function CustomDrawerContent(props) {
- const { SignOut} = useContext(AuthContext)
+ const { SignOut,user} = useContext(AuthContext)
+
+   console.log(user)
+
   const  sair = async () =>{
     await SignOut()
   }
@@ -41,9 +46,18 @@ function CustomDrawerContent(props) {
     <DrawerContentScrollView {...props}>
       <DrawerItemList {...props} />
       <DrawerItem
+        label="Meus Seviços"
+        onPress={()=>{props.navigation.navigate('Perfil')}}
+      />
+        <DrawerItem
+        label="Termos"
+        onPress={()=>{props.navigation.navigate('Perfil')}}
+      />
+      <DrawerItem
         label="Sair"
         onPress={sair}
       />
+   
   
     </DrawerContentScrollView>
   );
@@ -59,9 +73,11 @@ const [rotaAtual, setRota] = useState('Serviços');
       {/* <Appbar.BackAction /> */}
       <Appbar.Action icon="menu" 
             onPress={() =>{navigation.dispatch(DrawerActions.openDrawer())}} >
-            <Drawer.Navigator  >
-      <Drawer.Screen name="Dasboard"  />
-    </Drawer.Navigator >
+      <Drawer.Navigator  >
+      <Drawer.Screen name="Dasboard"  /> 
+
+     
+     </Drawer.Navigator >
     </Appbar.Action>
 
       <Appbar.Content  title={rotaAtual} />
@@ -84,6 +100,10 @@ const [rotaAtual, setRota] = useState('Serviços');
             } 
                  if (route.name === 'Work') {
               iconName = focused ? 'plus' : 'plus';
+        
+            } 
+                 if (route.name === 'Professional') {
+              iconName = focused ? 'users' : 'users';
         
             } 
            return <Icon name={iconName}size={size} color={color}/>
@@ -118,13 +138,26 @@ const [rotaAtual, setRota] = useState('Serviços');
                 },
             })}/>
     
-      <Tab.Screen name="Perfil" component={Profile}
+      <Tab.Screen  name="Perfil" component={Profile}
+          options={{
+          screen:false
+        }}
           listeners={({ navigation, route }) => ({
                 tabPress: e => {
                   setRota('Perfil')
                         // navigation.navigate('Perfil')
                 },
             })}/>
+          <Tab.Screen 
+           name="Professional"  component={Professional}
+       
+          listeners={({ navigation, route }) => ({
+                tabPress: e => {
+                  setRota('Profissionais')
+                        // navigation.navigate('Perfil')
+                },
+            })}/>
+  
     </Tab.Navigator>
 </>
   );
@@ -135,8 +168,7 @@ const AppRoutes = () => (
        
  
     <Drawer.Navigator drawerContent={props => <CustomDrawerContent {...props} />}>
-      <Drawer.Screen name="Serviços" component={MyTabs} />
-    
+      <Drawer.Screen   name="Menu" component={MyTabs} />
 
      </Drawer.Navigator>
  

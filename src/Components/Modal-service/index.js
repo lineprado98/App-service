@@ -15,7 +15,7 @@ const ModalService = ({ value,visible,hideModal,})=>{
     <Provider>
       <Portal>
         <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={containerStyle}>
-          <Text>{value.id}</Text>
+       
           <Whatsapp></Whatsapp>
         </Modal>
       </Portal>

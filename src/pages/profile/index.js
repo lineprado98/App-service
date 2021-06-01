@@ -24,12 +24,12 @@ const teste= () =>{
   return (
     <SafeAreaView style={style.safeArea}>
           <View style={style.container} >
-              <Avatar.Image size={180}   source={"https://www.petz.com.br/blog/wp-content/uploads/2021/03/piercing-para-cachorro-2.jpg"} />
+              <Avatar.Image size={180}   source={usuarioLogado.image} />
       <View style={style.paragrafo}>
           <AirbnbRating
           type='star'
           ratingCount={5}
-          imageSize={30}
+          imageSize={20}
           showRating={false}
           onFinishRating={20}/>
        </View>

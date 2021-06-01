@@ -3,10 +3,10 @@ import {View,Text,StyleSheet, Button, ScrollView,StatusBar,SafeAreaView} from're
 import { useContext } from 'react/cjs/react.development'
 import AuthContext from '../../context/AuthContext'
 import api from '../../services/api'
-import Card from '../../Components/Card-service'
+import Card from '../../Components/card-professional'
 import ModalService from '../../Components/Modal-service'
 
-const Dashboard = () => {
+const Professionals= () => {
 
   const [servicos,setServicos] = useState([]);
   const [itemSelected, setItemSelected] = useState();
@@ -24,8 +24,8 @@ const Dashboard = () => {
       console.log('use effect');
          (async ()=>{
 
-      let res = await api.get('/servicos');
-   
+      let res = await api.get('/profissionais');
+   console.log(res);
       setServicos(res.data.listServicos);
       
     })();
@@ -42,7 +42,7 @@ const Dashboard = () => {
 
 
     return (
-      <SafeAreaView style={style.container}>
+   <SafeAreaView style={style.container}>
     <ScrollView >
       {servicos&&(listServicos)}
       </ScrollView>
@@ -69,4 +69,4 @@ const style = StyleSheet.create({
 
 })
 
-export default Dashboard 
+export default Professionals
